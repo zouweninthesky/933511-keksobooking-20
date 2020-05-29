@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Иван Ван дер Заувен](https://up.htmlacademy.ru/javascript/20/user/933511).
-* Наставник: `Неизвестно`.
+* Наставник: [Артём Матковский](https://htmlacademy.ru/profile/id1151767).
 
 ---
 
