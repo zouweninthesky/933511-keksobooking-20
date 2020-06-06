@@ -27,12 +27,15 @@ var getText = function () {
 
 // Создаёт мок из заданных данных
 var createMock = function () {
+  var mockX = getRandomInt(0, 1201);
+  var mockY = getRandomInt(130, 631);
   var mock = {
     'author': {
       'avatar': 'img/avatars/user0' + getRandomInt(1, 8) + '.png'
     },
     'offer': {
       'title': getText(),
+      'address': mockX + ', ' + mockY,
       'price': getRandomInt(100, 200) * 10,
       'type': TYPE_LIST[getRandomInt(0, TYPE_LIST.length)],
       'rooms': getRandomInt(1, 3),
@@ -44,11 +47,10 @@ var createMock = function () {
       'photos': 'http://o0.github.io/assets/images/tokyo/hotel' + getRandomInt(1, PHOTOS_LIST) + '.jpg'
     },
     'location': {
-      'x': getRandomInt(0, 1201),
-      'y': getRandomInt(130, 631)
+      'x': mockX,
+      'y': mockY
     }
   };
-  mock.offer.address = mock.location.x + ', ' + mock.location.y;
   return mock;
 };
 
