@@ -4,11 +4,12 @@ var TYPE_LIST = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
 var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
 var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var PHOTOS_LIST = 3;
+var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var MOCKS_NUMBER = 8;
 
 var mapPins = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content;
+
 
 // Возвращает случайное целое число
 var getRandomInt = function (min, max) {
@@ -23,6 +24,15 @@ var getText = function () {
   } else {
     return 'Очень много разных слов';
   }
+};
+
+// Возвращает массив элементов objects заданной длины
+var getArray = function (length, objects) {
+  var array = [];
+  for (var i = 0; i < length; i++) {
+    array[i] = objects[getRandomInt(0, objects.length)];
+  }
+  return array;
 };
 
 // Создаёт мок из заданных данных
@@ -42,9 +52,9 @@ var createMock = function () {
       'guests': getRandomInt(1, 4),
       'checkin': CHECKIN_LIST[getRandomInt(0, CHECKIN_LIST.length)],
       'checkout': CHECKOUT_LIST[getRandomInt(0, CHECKOUT_LIST.length)],
-      'features': FEATURES_LIST[getRandomInt(0, FEATURES_LIST.length)],
+      'features': getArray(getRandomInt(0, FEATURES_LIST.length), FEATURES_LIST),
       'description': getText(),
-      'photos': 'http://o0.github.io/assets/images/tokyo/hotel' + getRandomInt(1, PHOTOS_LIST) + '.jpg'
+      'photos': getArray(getRandomInt(1, PHOTOS_LIST.length), PHOTOS_LIST)
     },
     'location': {
       'x': mockX,
@@ -84,7 +94,71 @@ var postPins = function (mocks) {
   mapPins.appendChild(fragment);
 };
 
+// Отрисовывает "удобства" по полученным данным
+var renderFeatures = function (features) {
+  var fragment = document.createDocumentFragment();
+  console.log('');
+  for (var i = 0; i < features.length; i++) {
+    var li = document.createElement('li');
+    li.classList.add('popup__feature');
+    li.classList.add('popup__feature--' + features[i]);
+    console.log(li);
+    fragment.appendChild(li);
+  }
+  return fragment;
+};
+
+// Отрисовывает фото по полученным данным
+var renderPhotos = function (photos, mock) {
+  photos.querySelector('img').src = mock.offer.photos[0];
+  if (mock.offer.photos.length > 1) {
+    var fragment = document.createDocumentFragment();
+    for (var j = 1; j < mock.offer.photos.length; j++) {
+      var anotherPhoto = photos.querySelector('img').cloneNode(true);
+      anotherPhoto.src = mock.offer.photos[j];
+      fragment.appendChild(anotherPhoto);
+    }
+    photos.appendChild(fragment);
+  }
+}
+
+var cardTemplate = document.querySelector('#card').content.querySelector('article');
+
+// Создаёт карточку объявления
+var generateCard = function (mock) {
+  var card = cardTemplate.cloneNode(true);
+  card.querySelector('.popup__title').textContent = mock.offer.title;
+  card.querySelector('.popup__text--address').textContent = mock.offer.address;
+  card.querySelector('.popup__text--price').textContent = mock.offer.price + '₽/ночь';
+  var type = card.querySelector('.popup__type');
+  if (mock.offer.type === 'flat') {
+    type.textContent = 'Квартира';
+  } else if (mock.offer.type === 'bungalo') {
+    type.textContent = 'Бунгало';
+  } else if (mock.offer.type === 'house') {
+    type.textContent = 'Дом';
+  } else {
+    type.textContent = 'Дворец';
+  }
+  card.querySelector('.popup__text--capacity').textContent = mock.offer.rooms + ' комнаты для ' + mock.offer.guests + ' гостей';
+  card.querySelector('.popup__text--time').textContent = 'Заезд после ' + mock.offer.checkin + ', выезд до ' + mock.offer.checkout;
+  var features = card.querySelector('.popup__features');
+  features.innerHTML = '';
+  features.appendChild(renderFeatures(mock.offer.features));
+  card.querySelector('.popup__description').textContent = mock.offer.description;
+  var photos = card.querySelector('.popup__photos');
+  renderPhotos(photos, mock);
+  card.querySelector('.popup__avatar').src = mock.author.avatar;
+  return (card);
+};
+
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-postPins(createMockArray());
+// Создаёт моки, чтобы можно было сразу вызвать их двумя разными функциями
+var mocks = createMockArray();
+
+postPins(mocks);
+
+// Помещает карточку объявления в разметку перед .map__filters-container
+map.insertBefore(generateCard(mocks[getRandomInt(0, mocks.length)]), document.querySelector('.map__filters-container'));
