@@ -1,13 +1,13 @@
 'use strict';
 
 var TYPE_LIST = ['palace', 'flat', 'house', 'bungalo'];
-var TYPE_DESCRIPTION = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
 var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
 var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var MOCKS_NUMBER = 8;
 
+var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var mapPins = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content;
 
@@ -104,7 +104,6 @@ var renderFeatures = function (features, container) {
     li.classList.add('popup__feature--' + features[i]);
     container.appendChild(li);
   }
-  return container;
 };
 
 // Отрисовывает фото по полученным данным
@@ -126,19 +125,19 @@ var cardTemplate = document.querySelector('#card').content.querySelector('articl
 // Создаёт карточку объявления
 var generateCard = function (mock) {
   var card = cardTemplate.cloneNode(true);
+  var featuresContainer = card.querySelector('.popup__features');
+  var photosContainer = card.querySelector('.popup__photos');
   card.querySelector('.popup__title').textContent = mock.offer.title;
   card.querySelector('.popup__text--address').textContent = mock.offer.address;
   card.querySelector('.popup__text--price').textContent = mock.offer.price + '₽/ночь';
-  card.querySelector('.popup__type').textContent = TYPE_DESCRIPTION[mock.offer.type];
+  card.querySelector('.popup__type').textContent = typeDescription[mock.offer.type];
   card.querySelector('.popup__text--capacity').textContent = mock.offer.rooms + ' комнаты для ' + mock.offer.guests + ' гостей';
   card.querySelector('.popup__text--time').textContent = 'Заезд после ' + mock.offer.checkin + ', выезд до ' + mock.offer.checkout;
-  var featuresContainer = card.querySelector('.popup__features');
-  renderFeatures(mock.offer.features, featuresContainer);
   card.querySelector('.popup__description').textContent = mock.offer.description;
-  var photosContainer = card.querySelector('.popup__photos');
-  renderPhotos(photosContainer, mock);
   card.querySelector('.popup__avatar').src = mock.author.avatar;
-  return (card);
+  renderFeatures(mock.offer.features, featuresContainer);
+  renderPhotos(photosContainer, mock);
+  return card;
 };
 
 var map = document.querySelector('.map');
