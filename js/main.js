@@ -9,7 +9,7 @@ var MOCKS_NUMBER = 8;
 var PIN_HEIGHT = 84;
 var PIN_WIDTH_HALF = 31;
 
-var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
+// var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var map = document.querySelector('.map');
 var mainPin = document.querySelector('.map__pin--main');
 var mapPins = document.querySelector('.map__pins');
@@ -19,6 +19,7 @@ var adAddress = adForm.querySelector('#address');
 var adRoomNumber = adForm.querySelector('#room_number');
 var adCapacity = adForm.querySelector('#capacity');
 var mapFilters = document.querySelector('.map__filters');
+var mapFieldsets = mapFilters.children;
 var pinTemplate = document.querySelector('#pin').content;
 
 // Возвращает случайное целое число
@@ -98,21 +99,21 @@ var renderPin = function (mock) {
 // Выкладывает моки на страницу
 var postPins = function (mocks) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < mocks.length; i++) {
-    fragment.appendChild(renderPin(mocks[i]));
-  }
+  mocks.forEach(function (mock) {
+    fragment.appendChild(renderPin(mock));
+  });
   mapPins.appendChild(fragment);
 };
 
 // Отрисовывает "удобства" по полученным данным
-var renderFeatures = function (features, container) {
+/* var renderFeatures = function (features, container) {
   container.innerHTML = '';
-  for (var i = 0; i < features.length; i++) {
+  features.forEach(function (feature) {
     var li = document.createElement('li');
     li.classList.add('popup__feature');
-    li.classList.add('popup__feature--' + features[i]);
+    li.classList.add('popup__feature--' + feature);
     container.appendChild(li);
-  }
+  });
 };
 
 // Отрисовывает фото по полученным данным
@@ -120,19 +121,19 @@ var renderPhotos = function (photos, mock) {
   photos.querySelector('img').src = mock.offer.photos[0];
   if (mock.offer.photos.length > 1) {
     var fragment = document.createDocumentFragment();
-    for (var j = 1; j < mock.offer.photos.length; j++) {
+    mock.offer.photos.forEach(function (photo) {
       var anotherPhoto = photos.querySelector('img').cloneNode(true);
-      anotherPhoto.src = mock.offer.photos[j];
+      anotherPhoto.src = photo;
       fragment.appendChild(anotherPhoto);
-    }
+    });
     photos.appendChild(fragment);
   }
-};
+}; */
 
-var cardTemplate = document.querySelector('#card').content.querySelector('article');
+// var cardTemplate = document.querySelector('#card').content.querySelector('article');
 
 // Создаёт карточку объявления
-var generateCard = function (mock) {
+/*  var generateCard = function (mock) {
   var card = cardTemplate.cloneNode(true);
   var featuresContainer = card.querySelector('.popup__features');
   var photosContainer = card.querySelector('.popup__photos');
@@ -147,6 +148,48 @@ var generateCard = function (mock) {
   renderFeatures(mock.offer.features, featuresContainer);
   renderPhotos(photosContainer, mock);
   return card;
+};*/
+
+// Активирует элементы полученной формы
+var disableForm = function (fieldset) {
+  for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = true;
+  }
+};
+
+// Деактивирует элементы полученной формы
+var activateForm = function (fieldset) {
+  for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = false;
+  }
+};
+
+// Снимает стартовые обработчики, навешивает координатный
+var switchMainPinListeners = function () {
+  mainPin.removeEventListener('mousedown', startingMainPinListenersConditions);
+  mainPin.removeEventListener('keydown', startingMainPinListenersConditions);
+  mainPin.addEventListener('mousedown', function (evt) {
+    if (evt.button === 0) {
+      getCoordinates();
+    }
+  });
+};
+
+// Условия срабатывания стартовых обработчиков
+var startingMainPinListenersConditions = function (evt) {
+  if (evt.button === 0) {
+    activeState(mocks);
+    getCoordinates();
+  }
+  if (evt.key === 'Enter') {
+    activeState(mocks);
+  }
+};
+
+// Навешивает стартовые обработчики
+var startingMainPinListeners = function () {
+  mainPin.addEventListener('mousedown', startingMainPinListenersConditions);
+  mainPin.addEventListener('keydown', startingMainPinListenersConditions);
 };
 
 // Задаёт Неактивное состояние страницы
@@ -154,20 +197,23 @@ var disabledState = function () {
   map.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
-  for (var i = 0; i < adFieldsets.length; i++) {
-    adFieldsets[i].disabled = true;
-  }
+  disableForm(mapFieldsets);
+  disableForm(adFieldsets);
+  startingMainPinListeners();
 };
 
-var activeState = function () {
+// Задаёт Активное состояние страницы
+var activeState = function (mocks) {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
-  for (var i = 0; i < adFieldsets.length; i++) {
-    adFieldsets[i].disabled = false;
-  }
+  activateForm(mapFieldsets);
+  activateForm(adFieldsets);
+  postPins(mocks);
+  switchMainPinListeners();
 };
 
+// Получает координаты нижнего конца главной метки
 var getCoordinates = function (start) {
   var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
   var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
@@ -179,21 +225,6 @@ var getCoordinates = function (start) {
   }
   adAddress.value = x + ', ' + y;
 };
-
-// Активирует страницу по клику
-mainPin.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0) {
-    activeState();
-    getCoordinates();
-  }
-});
-
-// Активирует страницу по нажатию Enter
-mainPin.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
-    activeState();
-  }
-});
 
 // Проверяет соответствие количества комнат количеству гостей
 var checkRoomCapacityInput = function () {
@@ -229,7 +260,5 @@ getCoordinates('start');
 // Создаёт моки, чтобы можно было сразу вызвать их двумя разными функциями
 var mocks = createMockArray();
 
-postPins(mocks);
-
 // Помещает карточку объявления в разметку перед .map__filters-container
-map.insertBefore(generateCard(mocks[getRandomInt(0, mocks.length)]), document.querySelector('.map__filters-container'));
+// map.insertBefore(generateCard(mocks[getRandomInt(0, mocks.length)]), document.querySelector('.map__filters-container'));
