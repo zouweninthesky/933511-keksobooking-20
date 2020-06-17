@@ -6,11 +6,21 @@ var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
 var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var MOCKS_NUMBER = 8;
+var PIN_HEIGHT = 84;
+var PIN_WIDTH_HALF = 31;
 
-var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
+// var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
+var map = document.querySelector('.map');
+var mainPin = document.querySelector('.map__pin--main');
 var mapPins = document.querySelector('.map__pins');
+var adForm = document.querySelector('.ad-form');
+var adFieldsets = adForm.querySelectorAll('fieldset');
+var adAddress = adForm.querySelector('#address');
+var adRoomNumber = adForm.querySelector('#room_number');
+var adCapacity = adForm.querySelector('#capacity');
+var mapFilters = document.querySelector('.map__filters');
+var mapFieldsets = mapFilters.children;
 var pinTemplate = document.querySelector('#pin').content;
-
 
 // Возвращает случайное целое число
 var getRandomInt = function (min, max) {
@@ -78,8 +88,8 @@ var createMockArray = function () {
 var renderPin = function (mock) {
   var pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.querySelector('button').style.left = mock.location.x - 31 + 'px';
-  pinElement.querySelector('button').style.top = mock.location.y - 84 + 'px';
+  pinElement.querySelector('button').style.left = mock.location.x - PIN_WIDTH_HALF + 'px';
+  pinElement.querySelector('button').style.top = mock.location.y - PIN_HEIGHT + 'px';
   pinElement.querySelector('img').src = mock.author.avatar;
   pinElement.querySelector('img').alt = mock.offer.title;
 
@@ -89,21 +99,21 @@ var renderPin = function (mock) {
 // Выкладывает моки на страницу
 var postPins = function (mocks) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < mocks.length; i++) {
-    fragment.appendChild(renderPin(mocks[i]));
-  }
+  mocks.forEach(function (mock) {
+    fragment.appendChild(renderPin(mock));
+  });
   mapPins.appendChild(fragment);
 };
 
 // Отрисовывает "удобства" по полученным данным
-var renderFeatures = function (features, container) {
+/* var renderFeatures = function (features, container) {
   container.innerHTML = '';
-  for (var i = 0; i < features.length; i++) {
+  features.forEach(function (feature) {
     var li = document.createElement('li');
     li.classList.add('popup__feature');
-    li.classList.add('popup__feature--' + features[i]);
+    li.classList.add('popup__feature--' + feature);
     container.appendChild(li);
-  }
+  });
 };
 
 // Отрисовывает фото по полученным данным
@@ -111,19 +121,19 @@ var renderPhotos = function (photos, mock) {
   photos.querySelector('img').src = mock.offer.photos[0];
   if (mock.offer.photos.length > 1) {
     var fragment = document.createDocumentFragment();
-    for (var j = 1; j < mock.offer.photos.length; j++) {
+    mock.offer.photos.forEach(function (photo) {
       var anotherPhoto = photos.querySelector('img').cloneNode(true);
-      anotherPhoto.src = mock.offer.photos[j];
+      anotherPhoto.src = photo;
       fragment.appendChild(anotherPhoto);
-    }
+    });
     photos.appendChild(fragment);
   }
-};
+}; */
 
-var cardTemplate = document.querySelector('#card').content.querySelector('article');
+// var cardTemplate = document.querySelector('#card').content.querySelector('article');
 
 // Создаёт карточку объявления
-var generateCard = function (mock) {
+/*  var generateCard = function (mock) {
   var card = cardTemplate.cloneNode(true);
   var featuresContainer = card.querySelector('.popup__features');
   var photosContainer = card.querySelector('.popup__photos');
@@ -138,15 +148,110 @@ var generateCard = function (mock) {
   renderFeatures(mock.offer.features, featuresContainer);
   renderPhotos(photosContainer, mock);
   return card;
+};*/
+
+
+var changeFormDisability = function (fieldset, flag) {
+    for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = flag ? true : false;
+  }
+}
+
+// Снимает стартовые обработчики, навешивает координатный
+var switchMainPinListeners = function () {
+  mainPin.removeEventListener('mousedown', startingMainPinListenersConditions);
+  mainPin.removeEventListener('keydown', startingMainPinListenersConditions);
+  mainPin.addEventListener('mousedown', function (evt) {
+    if (evt.button === 0) {
+      getCoordinates();
+    }
+  });
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// Условия срабатывания стартовых обработчиков
+var startingMainPinListenersConditions = function (evt) {
+  if (evt.button === 0) {
+    activeState(mocks);
+    getCoordinates();
+  }
+  if (evt.key === 'Enter') {
+    activeState(mocks);
+  }
+};
+
+// Навешивает стартовые обработчики
+var startingMainPinListeners = function () {
+  mainPin.addEventListener('mousedown', startingMainPinListenersConditions);
+  mainPin.addEventListener('keydown', startingMainPinListenersConditions);
+};
+
+// Задаёт Неактивное состояние страницы
+var disabledState = function () {
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map__filters--disabled');
+  changeFormDisability(mapFieldsets, 1);
+  changeFormDisability(adFieldsets, 1);
+  startingMainPinListeners();
+};
+
+// Задаёт Активное состояние страницы
+var activeState = function (mocks) {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  changeFormDisability(mapFieldsets, 0);
+  changeFormDisability(adFieldsets, 0);
+  postPins(mocks);
+  switchMainPinListeners();
+};
+
+// Получает координаты нижнего конца главной метки
+var getCoordinates = function (start) {
+  var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
+  var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
+  x += PIN_WIDTH_HALF;
+  if (start) {
+    y += PIN_WIDTH_HALF;
+  } else {
+    y += PIN_HEIGHT;
+  }
+  adAddress.value = x + ', ' + y;
+};
+
+// Проверяет соответствие количества комнат количеству гостей
+var checkRoomCapacityInput = function () {
+  if (adRoomNumber.value === '1' && adCapacity.value !== '1') {
+    adCapacity.setCustomValidity('Можно взять только одного гостя!');
+    adCapacity.reportValidity();
+  } else if (adRoomNumber.value === '2' && !(adCapacity.value === '1' || adCapacity.value === '2')) {
+    adCapacity.setCustomValidity('Можно взять только одного или двух гостей!');
+    adCapacity.reportValidity();
+  } else if (adRoomNumber.value === '3' && adCapacity.value === '0') {
+    adCapacity.setCustomValidity('Выберите количество гостей.');
+    adCapacity.reportValidity();
+  } else if (adRoomNumber.value === '100' && adCapacity.value !== '0') {
+    adCapacity.setCustomValidity('Эта опция не для гостей.');
+    adCapacity.reportValidity();
+  } else {
+    adCapacity.setCustomValidity('');
+    adCapacity.reportValidity();
+  }
+};
+
+adCapacity.addEventListener('change', function () {
+  checkRoomCapacityInput();
+});
+
+adRoomNumber.addEventListener('change', function () {
+  checkRoomCapacityInput();
+});
+
+disabledState();
+getCoordinates('start');
 
 // Создаёт моки, чтобы можно было сразу вызвать их двумя разными функциями
 var mocks = createMockArray();
 
-postPins(mocks);
-
 // Помещает карточку объявления в разметку перед .map__filters-container
-map.insertBefore(generateCard(mocks[getRandomInt(0, mocks.length)]), document.querySelector('.map__filters-container'));
+// map.insertBefore(generateCard(mocks[getRandomInt(0, mocks.length)]), document.querySelector('.map__filters-container'));
