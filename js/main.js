@@ -150,19 +150,12 @@ var renderPhotos = function (photos, mock) {
   return card;
 };*/
 
-// Активирует элементы полученной формы
-var disableForm = function (fieldset) {
-  for (var i = 0; i < fieldset.length; i++) {
-    fieldset[i].disabled = true;
-  }
-};
 
-// Деактивирует элементы полученной формы
-var activateForm = function (fieldset) {
-  for (var i = 0; i < fieldset.length; i++) {
-    fieldset[i].disabled = false;
+var changeFormDisability = function (fieldset, flag) {
+    for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = flag ? true : false;
   }
-};
+}
 
 // Снимает стартовые обработчики, навешивает координатный
 var switchMainPinListeners = function () {
@@ -197,8 +190,8 @@ var disabledState = function () {
   map.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
-  disableForm(mapFieldsets);
-  disableForm(adFieldsets);
+  changeFormDisability(mapFieldsets, 1);
+  changeFormDisability(adFieldsets, 1);
   startingMainPinListeners();
 };
 
@@ -207,8 +200,8 @@ var activeState = function (mocks) {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
-  activateForm(mapFieldsets);
-  activateForm(adFieldsets);
+  changeFormDisability(mapFieldsets, 0);
+  changeFormDisability(adFieldsets, 0);
   postPins(mocks);
   switchMainPinListeners();
 };
