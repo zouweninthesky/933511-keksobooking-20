@@ -30,22 +30,24 @@
   };
 
   // Создаёт карточку объявления
+  var generateCard = function (mock) {
+    var card = cardTemplate.cloneNode(true);
+    var featuresContainer = card.querySelector('.popup__features');
+    var photosContainer = card.querySelector('.popup__photos');
+    card.querySelector('.popup__title').textContent = mock.offer.title;
+    card.querySelector('.popup__text--address').textContent = mock.offer.address;
+    card.querySelector('.popup__text--price').textContent = mock.offer.price + '₽/ночь';
+    card.querySelector('.popup__type').textContent = typeDescription[mock.offer.type];
+    card.querySelector('.popup__text--capacity').textContent = mock.offer.rooms + ' комнаты для ' + mock.offer.guests + ' гостей';
+    card.querySelector('.popup__text--time').textContent = 'Заезд после ' + mock.offer.checkin + ', выезд до ' + mock.offer.checkout;
+    card.querySelector('.popup__description').textContent = mock.offer.description;
+    card.querySelector('.popup__avatar').src = mock.author.avatar;
+    renderFeatures(mock.offer.features, featuresContainer);
+    renderPhotos(photosContainer, mock);
+    return card;
+  };
+
   window.card = {
-    generateCard: function (mock) {
-      var card = cardTemplate.cloneNode(true);
-      var featuresContainer = card.querySelector('.popup__features');
-      var photosContainer = card.querySelector('.popup__photos');
-      card.querySelector('.popup__title').textContent = mock.offer.title;
-      card.querySelector('.popup__text--address').textContent = mock.offer.address;
-      card.querySelector('.popup__text--price').textContent = mock.offer.price + '₽/ночь';
-      card.querySelector('.popup__type').textContent = typeDescription[mock.offer.type];
-      card.querySelector('.popup__text--capacity').textContent = mock.offer.rooms + ' комнаты для ' + mock.offer.guests + ' гостей';
-      card.querySelector('.popup__text--time').textContent = 'Заезд после ' + mock.offer.checkin + ', выезд до ' + mock.offer.checkout;
-      card.querySelector('.popup__description').textContent = mock.offer.description;
-      card.querySelector('.popup__avatar').src = mock.author.avatar;
-      renderFeatures(mock.offer.features, featuresContainer);
-      renderPhotos(photosContainer, mock);
-      return card;
-    }
+    generateCard: generateCard
   };
 })();

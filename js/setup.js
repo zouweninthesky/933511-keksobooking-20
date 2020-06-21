@@ -54,14 +54,16 @@
   };
 
   // Задаёт Неактивное состояние страницы
+  var disabledState = function () {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    mapFilters.classList.add('map__filters--disabled');
+    changeFormDisability(mapFieldsets, 1);
+    changeFormDisability(adFieldsets, 1);
+    startingMainPinListeners();
+  };
+
   window.setup = {
-    disabledState: function () {
-      map.classList.add('map--faded');
-      adForm.classList.add('ad-form--disabled');
-      mapFilters.classList.add('map__filters--disabled');
-      changeFormDisability(mapFieldsets, 1);
-      changeFormDisability(adFieldsets, 1);
-      startingMainPinListeners();
-    }
+    disabledState: disabledState
   };
 })();

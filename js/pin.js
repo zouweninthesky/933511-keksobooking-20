@@ -17,15 +17,15 @@
   };
 
   // Выкладывает метки на страницу
-  window.pin = {
-    postPins: function (cards) {
-      var fragment = document.createDocumentFragment();
-      cards.forEach(function (card) {
-        fragment.appendChild(renderPin(card));
-      });
-      mapPins.appendChild(fragment);
-    }
+  var postPins = function (cards) {
+    var fragment = document.createDocumentFragment();
+    cards.forEach(function (card) {
+      fragment.appendChild(renderPin(card));
+    });
+    mapPins.appendChild(fragment);
   };
 
-
+  window.pin = {
+    postPins: postPins
+  };
 })();

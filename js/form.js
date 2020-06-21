@@ -36,17 +36,19 @@
   });
 
   // Получает координаты нижнего конца главной метки
-  window.form = {
-    getCoordinates: function (start) {
-      var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
-      var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
-      x += window.util.PIN_WIDTH_HALF;
-      if (start) {
-        y += window.util.PIN_WIDTH_HALF;
-      } else {
-        y += window.util.PIN_HEIGHT;
-      }
-      adAddress.value = x + ', ' + y;
+  var getCoordinates = function (start) {
+    var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
+    var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
+    x += window.util.PIN_WIDTH_HALF;
+    if (start) {
+      y += window.util.PIN_WIDTH_HALF;
+    } else {
+      y += window.util.PIN_HEIGHT;
     }
+    adAddress.value = x + ', ' + y;
+  };
+
+  window.form = {
+    getCoordinates: getCoordinates
   };
 })();
