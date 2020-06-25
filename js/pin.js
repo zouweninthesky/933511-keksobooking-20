@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var mapPins = document.querySelector('.map__pins');
+  var mapPinsSection = document.querySelector('.map__pins');
   var pinTemplate = document.querySelector('#pin').content;
 
   // Отрисовывает метку по полученным данным
@@ -22,7 +22,7 @@
     cards.forEach(function (card) {
       fragment.appendChild(renderPin(card));
     });
-    mapPins.appendChild(fragment);
+    mapPinsSection.appendChild(fragment);
   };
 
   window.pin = {
