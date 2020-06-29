@@ -1,54 +1,42 @@
 'use strict';
 
-// Позже добавлю сюда связь между меткой и карточкой
 (function () {
-  // temp
-  var map = document.querySelector('.map');
-  window.pin.postPins(window.data.mocks);
-  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var map = document.querySelector('.map');//
+  var mapPinsSection = document.querySelector('.map__pins');
 
-  var closeCard = function (card) {
-    card.parentNode.removeChild(card);
-  }
-
-  var onCardEscPress = function (card, evt) {
+  // Обрабатывает нажатие Escape при открытой карточке
+  var onCardEscPress = function (evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      console.log(card);
-      closeCard(card);
+      var card = document.querySelector('.map__card');
+      if (card) {
+        window.card.closeCard(card);
+      }
     }
   };
 
-  var renderCard = function (i) {
+  // Выкладывает метки на страницу
+  var postPins = function (cards) {
+    var fragment = document.createDocumentFragment();
+    cards.forEach(function (card) {
+      fragment.appendChild(window.pin.renderPin(card));
+    });
+    mapPinsSection.appendChild(fragment);
+  };
+
+  document.addEventListener('keydown', onCardEscPress);
+
+  var renderCard = function (card) {
     var oldCard = map.querySelector('.map__card');
-    if(oldCard) {
-      closeCard(oldCard);
-      document.removeEventListener('keydown', test);
+    if (oldCard) {
+      window.card.closeCard(oldCard);
     }
-    var newCard = window.card.generateCard(window.data.mocks[i]);
+    var newCard = window.card.generateCard(card);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
-    if(newCard) {
-      newCard.querySelector('.popup__close').addEventListener('click', function() {
-        closeCard(newCard);
-      });
-      var test = onCardEscPress.bind(this, newCard)
-      document.addEventListener('keydown', test);
-    }
-// Не настроено закрытие через Escape
+  };
 
-  }
-
-    for (const [i, pin] of mapPins.entries()) {
-      pin.addEventListener('click', function () {
-        renderCard(i);
-      });
-      pin.addEventListener('keydown', function (evt) {
-        if (evt.key === 'Enter') {
-          renderCard(i);
-        }
-      });
-    }
-
-  // temp Помещает карточку объявления в разметку перед .map__filters-container
-
+  window.map = {
+    postPins: postPins,
+    renderCard: renderCard
+  };
 })();

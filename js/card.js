@@ -29,6 +29,10 @@
     }
   };
 
+  var closeCard = function (card) {
+    card.parentNode.removeChild(card);
+  };
+
   // Создаёт карточку объявления
   var generateCard = function (data) {
     var card = cardTemplate.cloneNode(true);
@@ -44,10 +48,16 @@
     card.querySelector('.popup__avatar').src = data.author.avatar;
     renderFeatures(data.offer.features, featuresContainer);
     renderPhotos(photosContainer, data);
+
+    card.querySelector('.popup__close').addEventListener('click', function () {
+      closeCard(card);
+    });
+
     return card;
   };
 
   window.card = {
-    generateCard: generateCard
+    generateCard: generateCard,
+    closeCard: closeCard
   };
 })();
