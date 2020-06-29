@@ -1,8 +1,9 @@
 'use strict';
 
 (function () {
-  var mapPins = document.querySelector('.map__pins');
   var pinTemplate = document.querySelector('#pin').content;
+
+  // var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');//
 
   // Отрисовывает метку по полученным данным
   var renderPin = function (card) {
@@ -13,19 +14,19 @@
     pinElement.querySelector('img').src = card.author.avatar;
     pinElement.querySelector('img').alt = card.offer.title;
 
+    pinElement.querySelector('button').addEventListener('click', function () {
+      window.map.renderCard(card);
+    });
+    pinElement.querySelector('button').addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter') {
+        window.map.renderCard(card);
+      }
+    });
+
     return pinElement;
   };
 
-  // Выкладывает метки на страницу
-  var postPins = function (cards) {
-    var fragment = document.createDocumentFragment();
-    cards.forEach(function (card) {
-      fragment.appendChild(renderPin(card));
-    });
-    mapPins.appendChild(fragment);
-  };
-
   window.pin = {
-    postPins: postPins
+    renderPin: renderPin
   };
 })();

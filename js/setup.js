@@ -49,7 +49,7 @@
     mapFilters.classList.remove('map__filters--disabled');
     changeFormDisability(mapFieldsets, 0);
     changeFormDisability(adFieldsets, 0);
-    window.pin.postPins(mocks);
+    window.map.postPins(mocks);
     switchMainPinListeners();
   };
 
