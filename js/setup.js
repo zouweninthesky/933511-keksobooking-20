@@ -7,6 +7,13 @@
   var adForm = document.querySelector('.ad-form');
   var mapFieldsets = mapFilters.children;
   var adFieldsets = adForm.querySelectorAll('fieldset');
+  var pins = [];
+
+  var onLoad = function (data) {
+    pins = data;
+  };
+
+  window.backend.load(onLoad, window.backend.onError);
 
   var changeFormDisability = function (fieldset, flag) {
     for (var i = 0; i < fieldset.length; i++) {
@@ -28,11 +35,11 @@
   // Условия срабатывания стартовых обработчиков
   var startingMainPinListenersConditions = function (evt) {
     if (evt.button === 0) {
-      activeState(window.data.mocks);
+      activeState(pins);
       window.form.getCoordinates();
     }
     if (evt.key === 'Enter') {
-      activeState(window.data.mocks);
+      activeState(pins);
     }
   };
 
