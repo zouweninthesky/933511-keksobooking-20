@@ -11,6 +11,7 @@
 
   var onLoad = function (data) {
     pins = data;
+    console.log(pins);
   };
 
   window.backend.load(onLoad, window.backend.onError);

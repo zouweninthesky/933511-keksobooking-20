@@ -20,11 +20,11 @@
     photos.querySelector('img').src = data.offer.photos[0];
     if (data.offer.photos.length > 1) {
       var fragment = document.createDocumentFragment();
-      data.offer.photos.forEach(function (photo) {
+      for (var i = 1; i < data.offer.photos.length; i++) {
         var anotherPhoto = photos.querySelector('img').cloneNode(true);
-        anotherPhoto.src = photo;
+        anotherPhoto.src = data.offer.photos[i];
         fragment.appendChild(anotherPhoto);
-      });
+      };
       photos.appendChild(fragment);
     }
   };
