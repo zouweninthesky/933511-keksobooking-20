@@ -7,14 +7,24 @@
   var adForm = document.querySelector('.ad-form');
   var mapFieldsets = mapFilters.children;
   var adFieldsets = adForm.querySelectorAll('fieldset');
-  var pins = [];
 
   var onLoad = function (data) {
-    pins = data;
-    console.log(pins);
+    activeState(data);
   };
 
-  window.backend.load(onLoad, window.backend.onError);
+  var onError = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; line-height: 80px';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '20px';
+    node.style.textTransform = 'uppercase';
+    node.style.letterSpacing = '10px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
 
   var changeFormDisability = function (fieldset, flag) {
     for (var i = 0; i < fieldset.length; i++) {
@@ -36,11 +46,11 @@
   // Условия срабатывания стартовых обработчиков
   var startingMainPinListenersConditions = function (evt) {
     if (evt.button === 0) {
-      activeState(pins);
+      window.backend.load(onLoad, onError);
       window.form.getCoordinates();
     }
     if (evt.key === 'Enter') {
-      activeState(pins);
+      window.backend.load(onLoad, onError);
     }
   };
 

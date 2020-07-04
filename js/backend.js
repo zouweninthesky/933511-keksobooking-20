@@ -28,22 +28,7 @@
     xhr.send();
   };
 
-  var onError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; line-height: 80px';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '20px';
-    node.style.textTransform = 'uppercase';
-    node.style.letterSpacing = '10px';
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
   window.backend = {
-    onError: onError,
     load: load
   };
 })();

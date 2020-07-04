@@ -24,7 +24,7 @@
         var anotherPhoto = photos.querySelector('img').cloneNode(true);
         anotherPhoto.src = data.offer.photos[i];
         fragment.appendChild(anotherPhoto);
-      };
+      }
       photos.appendChild(fragment);
     }
   };
