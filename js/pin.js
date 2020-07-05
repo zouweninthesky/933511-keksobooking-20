@@ -3,8 +3,6 @@
 (function () {
   var pinTemplate = document.querySelector('#pin').content;
 
-  // var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');//
-
   // Отрисовывает метку по полученным данным
   var renderPin = function (card) {
     var pinElement = pinTemplate.cloneNode(true);
