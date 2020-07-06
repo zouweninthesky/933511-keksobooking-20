@@ -8,6 +8,24 @@
   var mapFieldsets = mapFilters.children;
   var adFieldsets = adForm.querySelectorAll('fieldset');
 
+  var onLoad = function (data) {
+    activeState(data);
+  };
+
+  var onError = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; line-height: 80px';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '20px';
+    node.style.textTransform = 'uppercase';
+    node.style.letterSpacing = '10px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   var changeFormDisability = function (fieldset, flag) {
     for (var i = 0; i < fieldset.length; i++) {
       fieldset[i].disabled = flag ? true : false;
@@ -28,11 +46,11 @@
   // Условия срабатывания стартовых обработчиков
   var startingMainPinListenersConditions = function (evt) {
     if (evt.button === 0) {
-      activeState(window.data.mocks);
+      window.backend.load(onLoad, onError);
       window.form.getCoordinates();
     }
     if (evt.key === 'Enter') {
-      activeState(window.data.mocks);
+      window.backend.load(onLoad, onError);
     }
   };
 

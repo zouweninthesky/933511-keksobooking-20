@@ -6,7 +6,7 @@
   var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
   var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-  var MOCKS_NUMBER = 8;
+  var MOCKS_NUMBER = 1;
 
   // Возвращает один из двух вариантов текста
   var getText = function () {

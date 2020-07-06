@@ -24,8 +24,6 @@
     mapPinsSection.appendChild(fragment);
   };
 
-  document.addEventListener('keydown', onCardEscPress);
-
   var renderCard = function (card) {
     var oldCard = map.querySelector('.map__card');
     if (oldCard) {
@@ -34,6 +32,8 @@
     var newCard = window.card.generateCard(card);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
   };
+
+  document.addEventListener('keydown', onCardEscPress);
 
   window.map = {
     postPins: postPins,
