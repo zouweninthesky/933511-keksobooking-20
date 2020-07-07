@@ -24,6 +24,14 @@
     mapPinsSection.appendChild(fragment);
   };
 
+  // Удаляет метки со страницы
+  var removePins = function () {
+    var pins = document.querySelector('.map__pins').querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
+      pin.parentNode.removeChild(pin);
+    });
+  };
+
   var renderCard = function (card) {
     var oldCard = map.querySelector('.map__card');
     if (oldCard) {
@@ -37,6 +45,7 @@
 
   window.map = {
     postPins: postPins,
+    removePins: removePins,
     renderCard: renderCard
   };
 })();
