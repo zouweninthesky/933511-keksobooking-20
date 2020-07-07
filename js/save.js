@@ -3,12 +3,17 @@
 (function () {
   var form = document.querySelector('.ad-form');
   var submit = form.querySelector('.ad-form__submit');
-  // var reset = form.querySelector('.ad-form__reset');
+  var reset = form.querySelector('.ad-form__reset');
 
   var resetForm = function () {
     form.reset();
     window.setup.disabledState();
     window.map.removePins();
+    var card = document.querySelector('.map__card');
+    if (card) {
+      window.card.closeCard(card);
+    }
+    window.form.getCoordinates();
   };
 
   submit.addEventListener('click', function (evt) {
@@ -26,7 +31,7 @@
     window.popup.showErrorPopup();
   };
 
-  // reset.addEventListener('click', resetForm);
+  reset.addEventListener('click', resetForm);
 
   window.save = {
   };
