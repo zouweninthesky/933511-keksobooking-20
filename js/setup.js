@@ -65,8 +65,8 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     mapFilters.classList.remove('map__filters--disabled');
-    changeFormDisability(mapFieldsets, 0);
-    changeFormDisability(adFieldsets, 0);
+    changeFormDisability(mapFieldsets, false);
+    changeFormDisability(adFieldsets, false);
     window.map.postPins(mocks);
     switchMainPinListeners();
   };
@@ -76,8 +76,8 @@
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     mapFilters.classList.add('map__filters--disabled');
-    changeFormDisability(mapFieldsets, 1);
-    changeFormDisability(adFieldsets, 1);
+    changeFormDisability(mapFieldsets, true);
+    changeFormDisability(adFieldsets, true);
     startingMainPinListeners();
   };
 
