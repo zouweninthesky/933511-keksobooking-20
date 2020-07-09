@@ -4,6 +4,8 @@
   var form = document.querySelector('.ad-form');
   var submit = form.querySelector('.ad-form__submit');
   var reset = form.querySelector('.ad-form__reset');
+  var successPopup = document.querySelector('#success').content.querySelector('.success');
+  var errorPopup = document.querySelector('#error').content.querySelector('.error');
 
   var resetForm = function () {
     form.reset();
@@ -23,12 +25,12 @@
   });
 
   var onLoad = function () {
-    window.popup.showSuccessPopup();
+    window.message.showMessage(successPopup);
     resetForm();
   };
 
   var onError = function () {
-    window.popup.showErrorPopup();
+    window.message.showMessage(errorPopup);
   };
 
   reset.addEventListener('click', resetForm);

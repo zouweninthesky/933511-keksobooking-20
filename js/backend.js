@@ -41,10 +41,11 @@
       }
     });
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError();
     });
+
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout / 1000 + ' с');
+      onError();
     });
 
     xhr.timeout = TIMEOUT_IN_MS;
