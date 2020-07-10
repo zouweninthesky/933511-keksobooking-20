@@ -11,10 +11,7 @@
     form.reset();
     window.setup.disabledState();
     window.map.removePins();
-    var card = document.querySelector('.map__card');
-    if (card) {
-      window.card.closeCard(card);
-    }
+    window.card.closeCard();
     window.form.getCoordinates();
   };
 
