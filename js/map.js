@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PINS_NUMBER = 5;
   var map = document.querySelector('.map');//
   var mapPinsSection = document.querySelector('.map__pins');
 
@@ -8,19 +9,17 @@
   var onCardEscPress = function (evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      var card = document.querySelector('.map__card');
-      if (card) {
-        window.card.closeCard(card);
-      }
+      window.card.closeCard();
     }
   };
 
   // Выкладывает метки на страницу
   var postPins = function (cards) {
+    var takeNumber = cards.length > PINS_NUMBER ? PINS_NUMBER : cards.length;
     var fragment = document.createDocumentFragment();
-    cards.forEach(function (card) {
-      fragment.appendChild(window.pin.renderPin(card));
-    });
+    for (var i = 0; i < takeNumber; i++) {
+      fragment.appendChild(window.pin.renderPin(cards[i]));
+    }
     mapPinsSection.appendChild(fragment);
   };
 
@@ -33,10 +32,7 @@
   };
 
   var renderCard = function (card) {
-    var oldCard = map.querySelector('.map__card');
-    if (oldCard) {
-      window.card.closeCard(oldCard);
-    }
+    window.card.closeCard();
     var newCard = window.card.generateCard(card);
     map.insertBefore(newCard, document.querySelector('.map__filters-container'));
   };

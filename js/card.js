@@ -33,8 +33,11 @@
     }
   };
 
-  var closeCard = function (card) {
-    card.parentNode.removeChild(card);
+  var closeCard = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.parentNode.removeChild(card);
+    }
   };
 
   var checkData = function (destination, data, string) {
@@ -70,7 +73,7 @@
     renderPhotos(photosContainer, data);
 
     card.querySelector('.popup__close').addEventListener('click', function () {
-      closeCard(card);
+      closeCard();
     });
 
     return card;

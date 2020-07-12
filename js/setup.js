@@ -7,23 +7,16 @@
   var adForm = document.querySelector('.ad-form');
   var mapFieldsets = mapFilters.children;
   var adFieldsets = adForm.querySelectorAll('fieldset');
+  var errorPopup = document.querySelector('#error').content.querySelector('.error');
+  var pins = [];
 
   var onLoad = function (data) {
-    activeState(data);
+    window.data.pins = data;
+    window.update.updatePins();
   };
 
-  var onError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; line-height: 80px';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '20px';
-    node.style.textTransform = 'uppercase';
-    node.style.letterSpacing = '10px';
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+  var onError = function () {
+    window.message.showMessage(errorPopup);
   };
 
   var changeFormDisability = function (fieldset, flag) {
@@ -46,11 +39,11 @@
   // Условия срабатывания стартовых обработчиков
   var startingMainPinListenersConditions = function (evt) {
     if (evt.button === 0) {
-      window.backend.load(onLoad, onError);
+      activeState();
       window.form.getCoordinates();
     }
     if (evt.key === 'Enter') {
-      window.backend.load(onLoad, onError);
+      activeState();
     }
   };
 
@@ -61,13 +54,13 @@
   };
 
   // Задаёт Активное состояние страницы
-  var activeState = function (mocks) {
+  var activeState = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     mapFilters.classList.remove('map__filters--disabled');
     changeFormDisability(mapFieldsets, false);
     changeFormDisability(adFieldsets, false);
-    window.map.postPins(mocks);
+    window.backend.load(onLoad, onError);
     switchMainPinListeners();
   };
 
@@ -83,5 +76,9 @@
 
   window.setup = {
     disabledState: disabledState
+  };
+
+  window.data = {
+    pins: pins
   };
 })();
