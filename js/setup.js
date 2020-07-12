@@ -7,6 +7,17 @@
   var adForm = document.querySelector('.ad-form');
   var mapFieldsets = mapFilters.children;
   var adFieldsets = adForm.querySelectorAll('fieldset');
+  var errorPopup = document.querySelector('#error').content.querySelector('.error');
+  var pins = [];
+
+  var onLoad = function (data) {
+    window.data.pins = data;
+    window.update.updatePins();
+  };
+
+  var onError = function () {
+    window.message.showMessage(errorPopup);
+  };
 
   var changeFormDisability = function (fieldset, flag) {
     for (var i = 0; i < fieldset.length; i++) {
@@ -49,7 +60,7 @@
     mapFilters.classList.remove('map__filters--disabled');
     changeFormDisability(mapFieldsets, false);
     changeFormDisability(adFieldsets, false);
-    window.update.updatePins();
+    window.backend.load(onLoad, onError);
     switchMainPinListeners();
   };
 
@@ -65,5 +76,9 @@
 
   window.setup = {
     disabledState: disabledState
+  };
+
+  window.data = {
+    pins: pins
   };
 })();
