@@ -8,37 +8,49 @@
   var guestNumberSelector = form.querySelector('#housing-guests');
   var featuresSelectors = form.querySelectorAll('.map__checkbox');
 
-  var getNeededType = function (pin) { // yes
-    return pin.offer.type === typeSelector.value;
+  var getNeededType = function (data) {
+    if (typeSelector.value === 'any') {
+      return true;
+    } else {
+      return typeSelector.value === data.offer.type;
+    }
   };
 
-  var getNeededPrice = function (pin) {
+  var getNeededPrice = function (data) {
     switch (priceSelector.value) {
       case 'low':
-        return (pin.offer.price < 10000);
+        return (data.offer.price < 10000);
       case 'middle':
-        return (pin.offer.price >= 10000 && pin.offer.price <= 50000);
+        return (data.offer.price >= 10000 && data.offer.price <= 50000);
       case 'high':
-        return (pin.offer.price > 50000);
+        return (data.offer.price > 50000);
     }
     return true;
   };
 
-  var getNeededRoomNumber = function (pin) {
-    return pin.offer.rooms.toString() === roomNumberSelector.value;
+  var getNeededRoomNumber = function (data) {
+    if (roomNumberSelector.value === 'any') {
+      return true;
+    } else {
+      return roomNumberSelector.value === data.offer.rooms.toString();
+    }
   };
 
-  var getNeededGuestNumber = function (pin) { //  yes
-    return pin.offer.guests.toString() === guestNumberSelector.value;
+  var getNeededGuestNumber = function (data) {
+    if (guestNumberSelector.value === 'any') {
+      return true;
+    } else {
+      return guestNumberSelector.value === data.offer.guests.toString();
+    }
   };
 
-  var getNeededFeature = function (pin) {
+  var getNeededFeature = function (data) {
     var counter = 0;
     for (var k = 0; k < featuresSelectors.length; k++) {
       if (featuresSelectors[k].checked === true) {
         counter--;
-        for (var i = 0; i < pin.offer.features.length; i++) {
-          if (pin.offer.features[i] === featuresSelectors[k].value) {
+        for (var i = 0; i < data.offer.features.length; i++) {
+          if (data.offer.features[i] === featuresSelectors[k].value) {
             counter++;
             break;
           }
@@ -49,12 +61,9 @@
   };
 
   var applyFilter = function (pins) {
-    var result = typeSelector.value === 'any' ? pins : pins.filter(getNeededType);
-    result = result.filter(getNeededPrice);
-    result = roomNumberSelector.value === 'any' ? result : result.filter(getNeededRoomNumber);
-    result = guestNumberSelector.value === 'any' ? result : result.filter(getNeededGuestNumber);
-    result = result.filter(getNeededFeature);
-    return result;
+    return pins.filter(function (pin) {
+      return getNeededType(pin) && getNeededPrice(pin) && getNeededRoomNumber(pin) && getNeededGuestNumber(pin) && getNeededFeature(pin);
+    });
   };
 
   var updatePins = function () {
