@@ -66,11 +66,11 @@
     });
   };
 
-  var updatePins = function () {
+  var updatePins = window.debounce(function () {
     window.card.closeCard();
     window.map.removePins();
     window.map.postPins(applyFilter(window.data.pins));
-  };
+  });
 
   form.addEventListener('change', updatePins);
 
