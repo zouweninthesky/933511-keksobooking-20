@@ -6,7 +6,6 @@
   var submit = form.querySelector('.ad-form__submit');
   var reset = form.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('#success').content.querySelector('.success');
-  var errorPopup = document.querySelector('#error').content.querySelector('.error');
 
   var resetForm = function () {
     form.reset();
@@ -30,7 +29,7 @@
   };
 
   var onError = function () {
-    window.message.showMessage(errorPopup);
+    window.form.globalCheck();
   };
 
   reset.addEventListener('click', resetForm);

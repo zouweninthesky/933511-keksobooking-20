@@ -36,6 +36,7 @@
   var closeCard = function () {
     var card = document.querySelector('.map__card');
     if (card) {
+      window.pin.deactivateChosenPin();
       card.parentNode.removeChild(card);
     }
   };

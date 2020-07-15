@@ -21,7 +21,7 @@
   };
 
   var showMessage = function (popup) {
-    document.body.insertAdjacentElement('afterbegin', popup);
+    document.querySelector('main').insertAdjacentElement('afterbegin', popup);
     document.addEventListener('click', closeMessage);
     document.addEventListener('keydown', onMessageEscPress);
   };
