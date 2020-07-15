@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var mainPin = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var submit = form.querySelector('.ad-form__submit');
   var reset = form.querySelector('.ad-form__reset');
@@ -22,6 +23,8 @@
   });
 
   var onLoad = function () {
+    mainPin.style.left = '570px';
+    mainPin.style.top = '375px';
     window.message.showMessage(successPopup);
     resetForm();
   };
