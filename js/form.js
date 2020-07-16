@@ -114,11 +114,9 @@
     checkTitleLength();
   });
 
-  var onAdPriceInput = function () {
+  adPrice.addEventListener('input', function () {
     checkPrice();
-  };
-
-  adPrice.addEventListener('input', onAdPriceInput);
+  });
 
   adCapacity.addEventListener('change', function () {
     checkRoomCapacityInput();
