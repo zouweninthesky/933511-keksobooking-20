@@ -67,9 +67,9 @@
   };
 
   var updatePins = window.debounce(function () {
-    window.card.closeCard();
+    window.card.close();
     window.map.removePins();
-    window.map.postPins(applyFilter(window.data.pins));
+    window.map.postPins(applyFilter(window.setup.pins));
   });
 
   form.addEventListener('change', updatePins);

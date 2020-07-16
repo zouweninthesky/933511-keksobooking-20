@@ -19,7 +19,14 @@
     'palace': 10000
   };
 
-  // Получает координаты нижнего конца главной метки
+  var addBorderColor = function (input) {
+    input.style.borderColor = 'red';
+  };
+
+  var removeBorderColor = function (input) {
+    input.style.borderColor = '#d9d9d3';
+  };
+
   var getCoordinates = function (start) {
     var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
     var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
@@ -34,26 +41,35 @@
 
   var checkTitleLength = function () {
     if (adTitle.value.length < 30) {
+      addBorderColor(adTitle);
       adTitle.setCustomValidity('Минимум 30 символов!');
       adTitle.reportValidity();
     } else if (adTitle.value.length > 100) {
+      addBorderColor(adTitle);
       adTitle.setCustomValidity('Максимум 100 символов!');
       adTitle.reportValidity();
     } else {
+      removeBorderColor(adTitle);
       adTitle.setCustomValidity('');
     }
   };
 
-  var checkType = function (option) {
-    adPrice.min = minPriceValues[option];
-    adPrice.placeholder = minPriceValues[option];
+  var changePriceForType = function () {
+    adPrice.min = minPriceValues[adType.value];
+    adPrice.placeholder = minPriceValues[adType.value];
   };
 
   var checkPrice = function () {
-    if (adPrice.value > 1000000) {
+    if (adPrice.value < parseInt(adPrice.min, 10)) {
+      addBorderColor(adPrice);
+      adPrice.setCustomValidity('Минимальная цена - ' + adPrice.min + '!');
+      adPrice.reportValidity();
+    } else if (adPrice.value > 1000000) {
+      addBorderColor(adPrice);
       adPrice.setCustomValidity('Максимальная цена - 1 миллион!');
       adPrice.reportValidity();
     } else {
+      removeBorderColor(adPrice);
       adPrice.setCustomValidity('');
       adPrice.reportValidity();
     }
@@ -63,36 +79,57 @@
     second.value = first.value;
   };
 
-  // Проверяет соответствие количества комнат количеству гостей
   var checkRoomCapacityInput = function () {
     if (adRoomNumber.value === '1' && adCapacity.value !== '1') {
+      addBorderColor(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного гостя!');
       adCapacity.reportValidity();
     } else if (adRoomNumber.value === '2' && !(adCapacity.value === '1' || adCapacity.value === '2')) {
+      addBorderColor(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного или двух гостей!');
       adCapacity.reportValidity();
     } else if (adRoomNumber.value === '3' && adCapacity.value === '0') {
+      addBorderColor(adCapacity);
       adCapacity.setCustomValidity('Выберите количество гостей.');
       adCapacity.reportValidity();
     } else if (adRoomNumber.value === '100' && adCapacity.value !== '0') {
+      addBorderColor(adCapacity);
       adCapacity.setCustomValidity('Эта опция не для гостей.');
       adCapacity.reportValidity();
     } else {
+      removeBorderColor(adCapacity);
       adCapacity.setCustomValidity('');
       adCapacity.reportValidity();
     }
+  };
+
+  var globalCheck = function () {
+    checkTitleLength();
+    checkPrice();
+    checkRoomCapacityInput();
+    checkRoomCapacityInput();
   };
 
   adTitle.addEventListener('input', function () {
     checkTitleLength();
   });
 
-  adType.addEventListener('change', function () {
-    checkType(adType.value);
+  var onAdPriceInput = function () {
+    checkPrice();
+  };
+
+  adPrice.addEventListener('input', onAdPriceInput);
+
+  adCapacity.addEventListener('change', function () {
+    checkRoomCapacityInput();
   });
 
-  adPrice.addEventListener('input', function () {
-    checkPrice();
+  adRoomNumber.addEventListener('change', function () {
+    checkRoomCapacityInput();
+  });
+
+  adType.addEventListener('change', function () {
+    window.form.changePriceForType();
   });
 
   adTimeIn.addEventListener('change', function () {
@@ -103,15 +140,9 @@
     changeTimeInput(adTimeOut, adTimeIn);
   });
 
-  adCapacity.addEventListener('change', function () {
-    checkRoomCapacityInput();
-  });
-
-  adRoomNumber.addEventListener('change', function () {
-    checkRoomCapacityInput();
-  });
-
   window.form = {
-    getCoordinates: getCoordinates
+    getCoordinates: getCoordinates,
+    changePriceForType: changePriceForType,
+    globalCheck: globalCheck
   };
 })();

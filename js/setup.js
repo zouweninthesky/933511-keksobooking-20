@@ -11,24 +11,23 @@
   var pins = [];
 
   var onLoad = function (data) {
-    window.data.pins = data;
+    window.setup.pins = data;
     window.update.updatePins();
   };
 
   var onError = function () {
-    window.message.showMessage(errorPopup);
+    window.message.show(errorPopup);
   };
 
-  var changeFormDisability = function (fieldset, flag) {
+  var changeFormDisability = function (fieldset, isEnabled) {
     for (var i = 0; i < fieldset.length; i++) {
-      fieldset[i].disabled = flag ? true : false;
+      fieldset[i].disabled = isEnabled ? true : false;
     }
   };
 
-  // Снимает стартовые обработчики, навешивает координатный
   var switchMainPinListeners = function () {
-    mainPin.removeEventListener('mousedown', startingMainPinListenersConditions);
-    mainPin.removeEventListener('keydown', startingMainPinListenersConditions);
+    mainPin.removeEventListener('mousedown', onMainPinStartClick);
+    mainPin.removeEventListener('keydown', onMainPinStartClick);
     mainPin.addEventListener('mousedown', function (evt) {
       if (evt.button === 0) {
         window.form.getCoordinates();
@@ -36,8 +35,7 @@
     });
   };
 
-  // Условия срабатывания стартовых обработчиков
-  var startingMainPinListenersConditions = function (evt) {
+  var onMainPinStartClick = function (evt) {
     if (evt.button === 0) {
       activeState();
       window.form.getCoordinates();
@@ -47,13 +45,11 @@
     }
   };
 
-  // Навешивает стартовые обработчики
   var startingMainPinListeners = function () {
-    mainPin.addEventListener('mousedown', startingMainPinListenersConditions);
-    mainPin.addEventListener('keydown', startingMainPinListenersConditions);
+    mainPin.addEventListener('mousedown', onMainPinStartClick);
+    mainPin.addEventListener('keydown', onMainPinStartClick);
   };
 
-  // Задаёт Активное состояние страницы
   var activeState = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -75,10 +71,7 @@
   };
 
   window.setup = {
+    pins: pins,
     disabledState: disabledState
-  };
-
-  window.data = {
-    pins: pins
   };
 })();

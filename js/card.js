@@ -4,7 +4,6 @@
   var cardTemplate = document.querySelector('#card').content.querySelector('article');
   var typeDescription = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 
-  // Отрисовывает "удобства" по полученным данным
   var renderFeatures = function (container, features) {
     container.innerHTML = '';
     features.forEach(function (feature) {
@@ -15,7 +14,13 @@
     });
   };
 
-  // Отрисовывает фото по полученным данным
+  var deactivateChosenPin = function () {
+    var pins = document.querySelectorAll('.map__pin');
+    pins.forEach(function (pin) {
+      pin.classList.remove('map__pin--active');
+    });
+  };
+
   var renderPhotos = function (photos, data) {
     if (data.offer.photos[0]) {
       photos.querySelector('img').src = data.offer.photos[0];
@@ -36,7 +41,20 @@
   var closeCard = function () {
     var card = document.querySelector('.map__card');
     if (card) {
+      deactivateChosenPin();
       card.parentNode.removeChild(card);
+    }
+  };
+
+  var onCardButtonClick = function () {
+    closeCard();
+  };
+
+  var onCardEscPress = function (evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      window.card.close();
+      document.removeEventListener('keydown', onCardEscPress);
     }
   };
 
@@ -56,7 +74,6 @@
     }
   };
 
-  // Создаёт карточку объявления
   var generateCard = function (data) {
     var card = cardTemplate.cloneNode(true);
     var featuresContainer = card.querySelector('.popup__features');
@@ -72,15 +89,14 @@
     renderFeatures(featuresContainer, data.offer.features);
     renderPhotos(photosContainer, data);
 
-    card.querySelector('.popup__close').addEventListener('click', function () {
-      closeCard();
-    });
+    card.querySelector('.popup__close').addEventListener('click', onCardButtonClick);
+    document.addEventListener('keydown', onCardEscPress);
 
     return card;
   };
 
   window.card = {
-    generateCard: generateCard,
-    closeCard: closeCard
+    generate: generateCard,
+    close: closeCard
   };
 })();

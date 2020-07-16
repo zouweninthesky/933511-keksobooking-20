@@ -3,28 +3,33 @@
 (function () {
   var pinTemplate = document.querySelector('#pin').content;
 
-  // Отрисовывает метку по полученным данным
-  var renderPin = function (card) {
-    var pinElement = pinTemplate.cloneNode(true);
+  var renderPin = function (data) {
+    var pinElementFragment = pinTemplate.cloneNode(true);
+    var pinElement = pinElementFragment.querySelector('button');
 
-    pinElement.querySelector('button').style.left = card.location.x - window.util.PIN_WIDTH_HALF + 'px';
-    pinElement.querySelector('button').style.top = card.location.y - window.util.PIN_HEIGHT + 'px';
-    pinElement.querySelector('img').src = card.author.avatar;
-    pinElement.querySelector('img').alt = card.offer.title;
+    if (data.offer) {
+      pinElement.style.left = data.location.x - window.util.PIN_WIDTH_HALF + 'px';
+      pinElement.style.top = data.location.y - window.util.PIN_HEIGHT + 'px';
+      pinElement.querySelector('img').src = data.author.avatar;
+      pinElement.querySelector('img').alt = data.offer.title;
 
-    pinElement.querySelector('button').addEventListener('click', function () {
-      window.map.renderCard(card);
-    });
-    pinElement.querySelector('button').addEventListener('keydown', function (evt) {
-      if (evt.key === 'Enter') {
-        window.map.renderCard(card);
-      }
-    });
-
+      pinElement.addEventListener('click', function () {
+        pinElement.classList.add('map__pin--active');
+        window.map.renderCard(data);
+      });
+      pinElement.addEventListener('keydown', function (evt) {
+        if (evt.key === 'Enter') {
+          pinElement.classList.add('map__pin--active');
+          window.map.renderCard(data);
+        }
+      });
+    } else {
+      pinElement.style.display = 'none';
+    }
     return pinElement;
   };
 
   window.pin = {
-    renderPin: renderPin
+    render: renderPin
   };
 })();
