@@ -9,22 +9,23 @@
 
   var resetForm = function () {
     form.reset();
+    window.form.changePriceForType();
     window.setup.disabledState();
     window.map.removePins();
-    window.card.closeCard();
+    window.card.close();
     window.form.getCoordinates();
   };
 
-  submit.addEventListener('click', function (evt) {
+  var onSubmitClick = function (evt) {
     evt.preventDefault();
     var data = new FormData(form);
     window.backend.save(data, onLoad, onError);
-  });
+  };
 
   var onLoad = function () {
     mainPin.style.left = '570px';
     mainPin.style.top = '375px';
-    window.message.showMessage(successPopup);
+    window.message.show(successPopup);
     resetForm();
   };
 
@@ -32,6 +33,7 @@
     window.form.globalCheck();
   };
 
+  submit.addEventListener('click', onSubmitClick);
   reset.addEventListener('click', resetForm);
 
   window.save = {

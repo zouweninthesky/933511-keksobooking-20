@@ -27,7 +27,6 @@
     input.style.borderColor = '#d9d9d3';
   };
 
-  // Получает координаты нижнего конца главной метки
   var getCoordinates = function (start) {
     var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
     var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
@@ -80,7 +79,6 @@
     second.value = first.value;
   };
 
-  // Проверяет соответствие количества комнат количеству гостей
   var checkRoomCapacityInput = function () {
     if (adRoomNumber.value === '1' && adCapacity.value !== '1') {
       addBorderColor(adCapacity);
@@ -116,9 +114,11 @@
     checkTitleLength();
   });
 
-  adPrice.addEventListener('input', function () {
+  var onAdPriceInput = function () {
     checkPrice();
-  });
+  };
+
+  adPrice.addEventListener('input', onAdPriceInput);
 
   adCapacity.addEventListener('change', function () {
     checkRoomCapacityInput();
@@ -129,8 +129,7 @@
   });
 
   adType.addEventListener('change', function () {
-    // checkType(adType.value);
-    changePriceForType();
+    window.form.changePriceForType();
   });
 
   adTimeIn.addEventListener('change', function () {
@@ -143,6 +142,7 @@
 
   window.form = {
     getCoordinates: getCoordinates,
+    changePriceForType: changePriceForType,
     globalCheck: globalCheck
   };
 })();

@@ -8,7 +8,6 @@
   var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   var MOCKS_NUMBER = 1;
 
-  // Возвращает один из двух вариантов текста
   var getText = function () {
     var flip = window.util.getRandomInt(0, 2);
     if (flip) {
@@ -18,7 +17,6 @@
     }
   };
 
-  // Возвращает массив элементов objects заданной длины
   var getArray = function (length, objects) {
     var array = [];
     for (var i = 0; i < length; i++) {
@@ -27,7 +25,6 @@
     return array;
   };
 
-  // Создаёт мок из заданных данных
   var createMock = function () {
     var mockX = window.util.getRandomInt(0, 1201);
     var mockY = window.util.getRandomInt(130, 631);
@@ -56,7 +53,6 @@
     return mock;
   };
 
-  // Создаёт заданное количество моков
   var createMockArray = function () {
     var mocks = [];
     for (var i = 0; i < MOCKS_NUMBER; i++) {

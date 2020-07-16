@@ -3,13 +3,6 @@
 (function () {
   var pinTemplate = document.querySelector('#pin').content;
 
-  var deactivateChosenPin = function () {
-    var pins = document.querySelectorAll('.map__pin');
-    pins.forEach(function (pin) {
-      pin.classList.remove('map__pin--active');
-    });
-  };
-
   var renderPin = function (data) {
     var pinElementFragment = pinTemplate.cloneNode(true);
     var pinElement = pinElementFragment.querySelector('button');
@@ -37,7 +30,6 @@
   };
 
   window.pin = {
-    renderPin: renderPin,
-    deactivateChosenPin: deactivateChosenPin
+    render: renderPin
   };
 })();

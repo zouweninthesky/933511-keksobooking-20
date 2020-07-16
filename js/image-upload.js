@@ -20,11 +20,9 @@
     chooser.addEventListener('change', function (evt) {
       var file = chooser.files[0];
       var fileName = file.name.toLowerCase();
-
       var matches = FILE_TYPES.some(function (it) {
         return fileName.endsWith(it);
       });
-
       if (matches) {
         var reader = new FileReader();
         reader.readAsDataURL(file);
@@ -35,8 +33,6 @@
         } else {
           setBackgroundImage(chooser, preview, reader);
         }
-
-
       } else {
         evt.preventDefault();
       }

@@ -9,8 +9,12 @@
     if (document.querySelector('.error')) {
       document.querySelector('.error').remove();
     }
-    document.removeEventListener('click', closeMessage);
+    document.removeEventListener('click', onMessageClick);
     document.removeEventListener('keydown', onMessageEscPress);
+  };
+
+  var onMessageClick = function () {
+    closeMessage();
   };
 
   var onMessageEscPress = function (evt) {
@@ -22,11 +26,11 @@
 
   var showMessage = function (popup) {
     document.querySelector('main').insertAdjacentElement('afterbegin', popup);
-    document.addEventListener('click', closeMessage);
+    document.addEventListener('click', onMessageClick);
     document.addEventListener('keydown', onMessageEscPress);
   };
 
   window.message = {
-    showMessage: showMessage
+    show: showMessage
   };
 })();
