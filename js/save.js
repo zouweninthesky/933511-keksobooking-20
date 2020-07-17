@@ -8,6 +8,12 @@
   var reset = form.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('#success').content.querySelector('.success');
 
+
+  var movePinStartPosition = function () {
+    mainPin.style.left = '570px';
+    mainPin.style.top = '375px';
+  };
+
   var resetForm = function () {
     form.reset();
     formInputs.forEach(function (formInput) {
@@ -17,6 +23,8 @@
     window.setup.disabledState();
     window.map.removePins();
     window.card.close();
+    movePinStartPosition();
+    window.imageUpload.resetImages();
     window.form.getCoordinates();
   };
 
@@ -27,8 +35,7 @@
   };
 
   var onLoad = function () {
-    mainPin.style.left = '570px';
-    mainPin.style.top = '375px';
+    movePinStartPosition();
     window.message.show(successPopup);
     resetForm();
   };
