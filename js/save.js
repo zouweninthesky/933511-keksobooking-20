@@ -3,12 +3,16 @@
 (function () {
   var mainPin = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
+  var formInputs = form.querySelectorAll('input, select');
   var submit = form.querySelector('.ad-form__submit');
   var reset = form.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('#success').content.querySelector('.success');
 
   var resetForm = function () {
     form.reset();
+    formInputs.forEach(function (formInput) {
+      window.form.removeRedBorder(formInput);
+    });
     window.form.changePriceForType();
     window.setup.disabledState();
     window.map.removePins();

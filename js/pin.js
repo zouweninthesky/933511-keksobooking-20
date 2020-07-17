@@ -9,27 +9,26 @@
   };
 
   var renderPin = function (data) {
-    var pinElementFragment = pinTemplate.cloneNode(true);
-    var pinElement = pinElementFragment.querySelector('button');
+    var pin = pinTemplate.cloneNode(true).querySelector('button');
 
     if (data.offer) {
-      pinElement.style.left = data.location.x - window.util.PIN_WIDTH_HALF + 'px';
-      pinElement.style.top = data.location.y - window.util.PIN_HEIGHT + 'px';
-      pinElement.querySelector('img').src = data.author.avatar;
-      pinElement.querySelector('img').alt = data.offer.title;
+      pin.style.left = data.location.x - window.util.PIN_WIDTH_HALF + 'px';
+      pin.style.top = data.location.y - window.util.PIN_HEIGHT + 'px';
+      pin.querySelector('img').src = data.author.avatar;
+      pin.querySelector('img').alt = data.offer.title;
 
-      pinElement.addEventListener('click', function () {
-        openCard(pinElement, data);
+      pin.addEventListener('click', function () {
+        openCard(pin, data);
       });
-      pinElement.addEventListener('keydown', function (evt) {
+      pin.addEventListener('keydown', function (evt) {
         if (evt.key === 'Enter') {
-          openCard(pinElement, data);
+          openCard(pin, data);
         }
       });
     } else {
-      pinElement.style.display = 'none';
+      pin.style.display = 'none';
     }
-    return pinElement;
+    return pin;
   };
 
   window.pin = {

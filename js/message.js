@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var main = document.querySelector('main');
 
   var closeMessage = function () {
     if (document.querySelector('.success')) {
@@ -25,7 +26,7 @@
   };
 
   var showMessage = function (popup) {
-    document.querySelector('main').insertAdjacentElement('afterbegin', popup);
+    main.insertAdjacentElement('afterbegin', popup);
     document.addEventListener('click', onMessageClick);
     document.addEventListener('keydown', onMessageEscPress);
   };
