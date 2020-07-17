@@ -3,6 +3,11 @@
 (function () {
   var pinTemplate = document.querySelector('#pin').content;
 
+  var openCard = function (target, data) {
+    target.classList.add('map__pin--active');
+    window.map.renderCard(data);
+  };
+
   var renderPin = function (data) {
     var pinElementFragment = pinTemplate.cloneNode(true);
     var pinElement = pinElementFragment.querySelector('button');
@@ -14,13 +19,11 @@
       pinElement.querySelector('img').alt = data.offer.title;
 
       pinElement.addEventListener('click', function () {
-        pinElement.classList.add('map__pin--active');
-        window.map.renderCard(data);
+        openCard(pinElement, data);
       });
       pinElement.addEventListener('keydown', function (evt) {
         if (evt.key === 'Enter') {
-          pinElement.classList.add('map__pin--active');
-          window.map.renderCard(data);
+          openCard(pinElement, data);
         }
       });
     } else {

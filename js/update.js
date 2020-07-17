@@ -46,17 +46,18 @@
 
   var getNeededFeature = function (data) {
     var counter = 0;
-    for (var k = 0; k < featuresSelectors.length; k++) {
-      if (featuresSelectors[k].checked === true) {
+    featuresSelectors.forEach(function (featuresSelector) {
+      if (featuresSelector.checked === true) {
         counter--;
         for (var i = 0; i < data.offer.features.length; i++) {
-          if (data.offer.features[i] === featuresSelectors[k].value) {
+          if (data.offer.features[i] === featuresSelector.value) {
             counter++;
             break;
           }
         }
       }
-    }
+    });
+
     return (counter === 0);
   };
 
