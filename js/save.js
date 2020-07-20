@@ -6,7 +6,8 @@
   var formInputs = form.querySelectorAll('input, select');
   var submit = form.querySelector('.ad-form__submit');
   var reset = form.querySelector('.ad-form__reset');
-  var successPopup = document.querySelector('#success').content.querySelector('.success');
+  var successMessage = document.querySelector('#success').content.querySelector('.success');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
 
   var movePinStartPosition = function () {
@@ -31,17 +32,19 @@
   var onSubmitClick = function (evt) {
     evt.preventDefault();
     var data = new FormData(form);
-    window.backend.save(data, onLoad, onError);
+    if (window.form.globalCheck()) {
+      window.backend.save(data, onLoad, onError);
+    }
   };
 
   var onLoad = function () {
     movePinStartPosition();
-    window.message.show(successPopup);
+    window.message.show(successMessage);
     resetForm();
   };
 
   var onError = function () {
-    window.form.globalCheck();
+    window.message.show(errorMessage);
   };
 
   submit.addEventListener('click', onSubmitClick);

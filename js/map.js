@@ -3,7 +3,7 @@
 (function () {
   var PINS_NUMBER = 5;
   var map = document.querySelector('.map');
-  var mapFiltersContainer = document.querySelector('.map__filters-container')
+  var mapFiltersContainer = document.querySelector('.map__filters-container');
   var mapPinsSection = document.querySelector('.map__pins');
 
   var postPins = function (cards) {

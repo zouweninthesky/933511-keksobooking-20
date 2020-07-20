@@ -7,7 +7,7 @@
   var adForm = document.querySelector('.ad-form');
   var mapFieldsets = mapFilters.querySelectorAll('fieldset, select');
   var adFieldsets = adForm.querySelectorAll('fieldset');
-  var errorPopup = document.querySelector('#error').content.querySelector('.error');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var pins = [];
 
   var onLoad = function (data) {
@@ -16,7 +16,7 @@
   };
 
   var onError = function () {
-    window.message.show(errorPopup);
+    window.message.show(errorMessage);
   };
 
   var changeFormDisability = function (fieldsets, isEnabled) {

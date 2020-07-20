@@ -5,7 +5,7 @@
   var UP_URL = 'https://javascript.pages.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
 
-  var load = function (onSuccess, onError) {
+  var createXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -17,38 +17,25 @@
       }
     });
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError();
     });
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout / 1000 + ' с');
+      onError();
     });
 
     xhr.timeout = TIMEOUT_IN_MS;
+    return xhr;
+  };
+
+  var load = function (onSuccess, onError) {
+    var xhr = createXhr(onSuccess, onError);
 
     xhr.open('GET', DOWN_URL);
     xhr.send();
   };
 
   var save = function (data, onSuccess, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-    xhr.addEventListener('error', function () {
-      onError();
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError();
-    });
-
-    xhr.timeout = TIMEOUT_IN_MS;
+    var xhr = createXhr(onSuccess, onError);
 
     xhr.open('POST', UP_URL);
     xhr.send(data);

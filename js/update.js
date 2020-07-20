@@ -73,7 +73,11 @@
     window.map.postPins(applyFilter(window.setup.pins));
   });
 
-  form.addEventListener('change', updatePins);
+  var onFormChange = function () {
+    updatePins();
+  };
+
+  form.addEventListener('change', onFormChange);
 
   window.update = {
     updatePins: updatePins

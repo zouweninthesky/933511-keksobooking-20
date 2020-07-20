@@ -5,11 +5,11 @@
     minY: 130,
     minX: 0,
     maxY: 630,
-    maxX: 1200
+    maxX: document.documentElement.clientWidth
   };
 
   var pinRestrictedCoordinates = {
-    minY: dragArea.minY,
+    minY: dragArea.minY - window.util.PIN_HEIGHT,
     maxY: dragArea.maxY - window.util.PIN_HEIGHT,
     minX: dragArea.minX - window.util.PIN_WIDTH_HALF,
     maxX: dragArea.maxX - window.util.PIN_WIDTH_HALF
@@ -42,7 +42,7 @@
         y: moveEvt.clientY
       };
 
-      if (mainPin.offsetTop <= pinRestrictedCoordinates.minY) {
+      if (mainPin.offsetTop < pinRestrictedCoordinates.minY) {
         mainPin.style.top = pinRestrictedCoordinates.minY + 'px';
       }
 
@@ -81,4 +81,11 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.movePin = {
+    minX: dragArea.minX,
+    maxX: dragArea.maxX,
+    minY: dragArea.minY,
+    maxY: dragArea.maxY
+  };
 })();
