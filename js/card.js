@@ -25,12 +25,13 @@
     if (data.offer.photos[0]) {
       photos.querySelector('img').src = data.offer.photos[0];
       if (data.offer.photos.length > 1) {
+        var morePhotos = data.offer.photos.slice(1);
         var fragment = document.createDocumentFragment();
-        for (var i = 1; i < data.offer.photos.length; i++) {
+        morePhotos.forEach(function (photo) {
           var anotherPhoto = photos.querySelector('img').cloneNode(true);
-          anotherPhoto.src = data.offer.photos[i];
+          anotherPhoto.src = photo;
           fragment.appendChild(anotherPhoto);
-        }
+        });
         photos.appendChild(fragment);
       }
     } else {

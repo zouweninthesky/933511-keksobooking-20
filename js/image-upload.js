@@ -39,7 +39,15 @@
     });
   };
 
+  var resetImages = function () {
+    userPhotoPreview.src = 'img/muffin-grey.svg';
+    adPhotoPreview.style.background = '#e4e4de';
+  };
+
   uploadImage(userPhotoChooser, userPhotoPreview);
   uploadImage(adPhotoChooser, adPhotoPreview);
 
+  window.imageUpload = {
+    resetImages: resetImages
+  };
 })();

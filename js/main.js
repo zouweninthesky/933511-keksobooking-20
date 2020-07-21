@@ -1,4 +1,6 @@
 'use strict';
 
-window.setup.disabledState();
-window.form.getCoordinates('start');
+(function () {
+  window.setup.disabledState();
+  window.form.getCoordinates('start');
+})();

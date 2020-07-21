@@ -19,38 +19,53 @@
     'palace': 10000
   };
 
-  var addBorderColor = function (input) {
+  var addRedBorder = function (input) {
     input.style.borderColor = 'red';
   };
 
-  var removeBorderColor = function (input) {
+  var removeRedBorder = function (input) {
     input.style.borderColor = '#d9d9d3';
   };
 
   var getCoordinates = function (start) {
-    var x = parseInt(mainPin.style.left.replace(/[^+\d]/g, ''), 10);
-    var y = parseInt(mainPin.style.top.replace(/[^+\d]/g, ''), 10);
+    var x = parseInt(mainPin.style.left.replace(/px/g, ''), 10);
+    var y = parseInt(mainPin.style.top.replace(/px/g, ''), 10);
     x += window.util.PIN_WIDTH_HALF;
+    if (x <= window.movePin.minX) {
+      x = window.movePin.minX;
+    }
+    if (x >= window.movePin.maxX) {
+      x = window.movePin.maxX;
+    }
     if (start) {
       y += window.util.PIN_WIDTH_HALF;
     } else {
       y += window.util.PIN_HEIGHT;
+      if (y <= window.movePin.minY) {
+        y = window.movePin.minY;
+      }
+      if (y >= window.movePin.maxY) {
+        y = window.movePin.maxY;
+      }
     }
     adAddress.value = x + ', ' + y;
   };
 
   var checkTitleLength = function () {
     if (adTitle.value.length < 30) {
-      addBorderColor(adTitle);
+      addRedBorder(adTitle);
       adTitle.setCustomValidity('Минимум 30 символов!');
       adTitle.reportValidity();
+      return -1;
     } else if (adTitle.value.length > 100) {
-      addBorderColor(adTitle);
+      addRedBorder(adTitle);
       adTitle.setCustomValidity('Максимум 100 символов!');
       adTitle.reportValidity();
+      return -1;
     } else {
-      removeBorderColor(adTitle);
+      removeRedBorder(adTitle);
       adTitle.setCustomValidity('');
+      return 0;
     }
   };
 
@@ -61,17 +76,20 @@
 
   var checkPrice = function () {
     if (adPrice.value < parseInt(adPrice.min, 10)) {
-      addBorderColor(adPrice);
+      addRedBorder(adPrice);
       adPrice.setCustomValidity('Минимальная цена - ' + adPrice.min + '!');
       adPrice.reportValidity();
+      return -1;
     } else if (adPrice.value > 1000000) {
-      addBorderColor(adPrice);
+      addRedBorder(adPrice);
       adPrice.setCustomValidity('Максимальная цена - 1 миллион!');
       adPrice.reportValidity();
+      return -1;
     } else {
-      removeBorderColor(adPrice);
+      removeRedBorder(adPrice);
       adPrice.setCustomValidity('');
       adPrice.reportValidity();
+      return 0;
     }
   };
 
@@ -81,44 +99,44 @@
 
   var checkRoomCapacityInput = function () {
     if (adRoomNumber.value === '1' && adCapacity.value !== '1') {
-      addBorderColor(adCapacity);
+      addRedBorder(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного гостя!');
       adCapacity.reportValidity();
+      return -1;
     } else if (adRoomNumber.value === '2' && !(adCapacity.value === '1' || adCapacity.value === '2')) {
-      addBorderColor(adCapacity);
+      addRedBorder(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного или двух гостей!');
       adCapacity.reportValidity();
+      return -1;
     } else if (adRoomNumber.value === '3' && adCapacity.value === '0') {
-      addBorderColor(adCapacity);
+      addRedBorder(adCapacity);
       adCapacity.setCustomValidity('Выберите количество гостей.');
       adCapacity.reportValidity();
+      return -1;
     } else if (adRoomNumber.value === '100' && adCapacity.value !== '0') {
-      addBorderColor(adCapacity);
+      addRedBorder(adCapacity);
       adCapacity.setCustomValidity('Эта опция не для гостей.');
       adCapacity.reportValidity();
+      return -1;
     } else {
-      removeBorderColor(adCapacity);
+      removeRedBorder(adCapacity);
       adCapacity.setCustomValidity('');
       adCapacity.reportValidity();
+      return 0;
     }
   };
 
   var globalCheck = function () {
-    checkTitleLength();
-    checkPrice();
-    checkRoomCapacityInput();
-    checkRoomCapacityInput();
+    return (checkTitleLength() + checkPrice() + checkRoomCapacityInput() === 0);
   };
 
   adTitle.addEventListener('input', function () {
     checkTitleLength();
   });
 
-  var onAdPriceInput = function () {
+  adPrice.addEventListener('input', function () {
     checkPrice();
-  };
-
-  adPrice.addEventListener('input', onAdPriceInput);
+  });
 
   adCapacity.addEventListener('change', function () {
     checkRoomCapacityInput();
@@ -143,6 +161,7 @@
   window.form = {
     getCoordinates: getCoordinates,
     changePriceForType: changePriceForType,
-    globalCheck: globalCheck
+    globalCheck: globalCheck,
+    removeRedBorder: removeRedBorder
   };
 })();

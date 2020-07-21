@@ -5,9 +5,9 @@
   var mainPin = document.querySelector('.map__pin--main');
   var mapFilters = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
-  var mapFieldsets = mapFilters.children;
+  var mapFieldsets = mapFilters.querySelectorAll('fieldset, select');
   var adFieldsets = adForm.querySelectorAll('fieldset');
-  var errorPopup = document.querySelector('#error').content.querySelector('.error');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var pins = [];
 
   var onLoad = function (data) {
@@ -16,13 +16,13 @@
   };
 
   var onError = function () {
-    window.message.show(errorPopup);
+    window.message.show(errorMessage);
   };
 
-  var changeFormDisability = function (fieldset, isEnabled) {
-    for (var i = 0; i < fieldset.length; i++) {
-      fieldset[i].disabled = isEnabled ? true : false;
-    }
+  var changeFormDisability = function (fieldsets, isEnabled) {
+    fieldsets.forEach(function (fieldset) {
+      fieldset.disabled = isEnabled ? true : false;
+    });
   };
 
   var switchMainPinListeners = function () {
@@ -60,7 +60,6 @@
     switchMainPinListeners();
   };
 
-  // Задаёт Неактивное состояние страницы
   var disabledState = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
