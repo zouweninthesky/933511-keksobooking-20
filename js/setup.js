@@ -21,7 +21,7 @@
 
   var changeFormDisability = function (fieldsets, isEnabled) {
     fieldsets.forEach(function (fieldset) {
-      fieldset.disabled = isEnabled ? true : false;
+      fieldset.disabled = isEnabled;
     });
   };
 
@@ -29,18 +29,18 @@
     mainPin.removeEventListener('mousedown', onMainPinStartClick);
     mainPin.removeEventListener('keydown', onMainPinStartClick);
     mainPin.addEventListener('mousedown', function (evt) {
-      if (evt.button === 0) {
+      if (evt.button === window.util.LEFT_BUTTON_CLICK_CODE) {
         window.form.getCoordinates();
       }
     });
   };
 
   var onMainPinStartClick = function (evt) {
-    if (evt.button === 0) {
+    if (evt.button === window.util.LEFT_BUTTON_CLICK_CODE) {
       activeState();
       window.form.getCoordinates();
     }
-    if (evt.key === 'Enter') {
+    if (evt.key === window.util.keyCodes.ent) {
       activeState();
     }
   };

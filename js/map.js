@@ -16,7 +16,7 @@
   };
 
   var removePins = function () {
-    var pins = document.querySelector('.map__pins').querySelectorAll('.map__pin:not(.map__pin--main)');
+    var pins = mapPinsSection.querySelectorAll('.map__pin:not(.map__pin--main)');
     pins.forEach(function (pin) {
       pin.parentNode.removeChild(pin);
     });

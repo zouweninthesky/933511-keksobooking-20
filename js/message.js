@@ -4,11 +4,13 @@
   var main = document.querySelector('main');
 
   var closeMessage = function () {
-    if (document.querySelector('.success')) {
-      document.querySelector('.success').remove();
+    var successMessage = document.querySelector('.success');
+    var errorMessage = document.querySelector('.error');
+    if (successMessage) {
+      successMessage.remove();
     }
-    if (document.querySelector('.error')) {
-      document.querySelector('.error').remove();
+    if (errorMessage) {
+      errorMessage.remove();
     }
     document.removeEventListener('click', onMessageClick);
     document.removeEventListener('keydown', onMessageEscPress);
@@ -19,7 +21,7 @@
   };
 
   var onMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
+    if (evt.key === window.util.keyCodes.esc) {
       evt.preventDefault();
       closeMessage();
     }

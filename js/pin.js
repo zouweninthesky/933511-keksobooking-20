@@ -4,6 +4,7 @@
   var pinTemplate = document.querySelector('#pin').content;
 
   var openCard = function (target, data) {
+    window.card.close();
     target.classList.add('map__pin--active');
     window.map.renderCard(data);
   };
@@ -21,7 +22,7 @@
         openCard(pin, data);
       });
       pin.addEventListener('keydown', function (evt) {
-        if (evt.key === 'Enter') {
+        if (evt.key === window.util.keyCodes.ent) {
           openCard(pin, data);
         }
       });

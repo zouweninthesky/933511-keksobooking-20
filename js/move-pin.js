@@ -1,18 +1,18 @@
 'use strict';
 
 (function () {
-  var dragArea = {
+  var DragArea = {
     minY: 130,
     minX: 0,
     maxY: 630,
-    maxX: document.documentElement.clientWidth
+    maxX: document.querySelector('.map').clientWidth
   };
 
   var pinRestrictedCoordinates = {
-    minY: dragArea.minY - window.util.PIN_HEIGHT,
-    maxY: dragArea.maxY - window.util.PIN_HEIGHT,
-    minX: dragArea.minX - window.util.PIN_WIDTH_HALF,
-    maxX: dragArea.maxX - window.util.PIN_WIDTH_HALF
+    minY: DragArea.minY - window.util.PIN_HEIGHT,
+    maxY: DragArea.maxY - window.util.PIN_HEIGHT,
+    minX: DragArea.minX - window.util.PIN_WIDTH_HALF,
+    maxX: DragArea.maxX - window.util.PIN_WIDTH_HALF
   };
 
   var mainPin = document.querySelector('.map__pin--main');
@@ -29,6 +29,7 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+      window.form.getCoordinates();
 
       dragged = true;
 
@@ -64,17 +65,16 @@
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      window.form.getCoordinates();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (clickEvt) {
+        var onPinClick = function (clickEvt) {
           clickEvt.preventDefault();
-          mainPin.removeEventListener('click', onClickPreventDefault);
+          mainPin.removeEventListener('click', onPinClick);
         };
-        mainPin.addEventListener('click', onClickPreventDefault);
+        mainPin.addEventListener('click', onPinClick);
       }
     };
 
@@ -82,10 +82,24 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var updateDragAreaWidth = function () {
+    DragArea.maxX = document.querySelector('.map').clientWidth;
+    pinRestrictedCoordinates.maxX = DragArea.maxX - window.util.PIN_WIDTH_HALF;
+    if (parseInt(mainPin.style.left.replace(/px/g, ''), 10) >= pinRestrictedCoordinates.maxX) {
+      mainPin.style.left = pinRestrictedCoordinates.maxX + 'px';
+    }
+  };
+
+  var onDocumentResize = function () {
+    updateDragAreaWidth();
+  };
+
+  window.addEventListener('resize', onDocumentResize);
+
   window.movePin = {
-    minX: dragArea.minX,
-    maxX: dragArea.maxX,
-    minY: dragArea.minY,
-    maxY: dragArea.maxY
+    minX: DragArea.minX,
+    maxX: DragArea.maxX,
+    minY: DragArea.minY,
+    maxY: DragArea.maxY
   };
 })();

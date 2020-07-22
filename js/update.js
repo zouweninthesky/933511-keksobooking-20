@@ -7,47 +7,45 @@
   var roomNumberSelector = form.querySelector('#housing-rooms');
   var guestNumberSelector = form.querySelector('#housing-guests');
   var featuresSelectors = form.querySelectorAll('.map__checkbox');
+  var ANY_VALUE = 'any';
+  var priceCategoriesNames = {
+    low: 'low',
+    middle: 'middle',
+    high: 'high'
+  };
+  var priceCategoriesValues = {
+    low: 10000,
+    high: 50000
+  };
 
   var getNeededType = function (data) {
-    if (typeSelector.value === 'any') {
-      return true;
-    } else {
-      return typeSelector.value === data.offer.type;
-    }
+    return typeSelector.value === ANY_VALUE || typeSelector.value === data.offer.type;
   };
 
   var getNeededPrice = function (data) {
     switch (priceSelector.value) {
-      case 'low':
-        return (data.offer.price < 10000);
-      case 'middle':
-        return (data.offer.price >= 10000 && data.offer.price <= 50000);
-      case 'high':
-        return (data.offer.price > 50000);
+      case priceCategoriesNames.low:
+        return (data.offer.price < priceCategoriesValues.low);
+      case priceCategoriesNames.middle:
+        return (data.offer.price >= priceCategoriesValues.low && data.offer.price <= priceCategoriesValues.high);
+      case priceCategoriesNames.high:
+        return (data.offer.price > priceCategoriesValues.high);
     }
     return true;
   };
 
   var getNeededRoomNumber = function (data) {
-    if (roomNumberSelector.value === 'any') {
-      return true;
-    } else {
-      return roomNumberSelector.value === data.offer.rooms.toString();
-    }
+    return roomNumberSelector.value === ANY_VALUE || roomNumberSelector.value === data.offer.rooms.toString();
   };
 
   var getNeededGuestNumber = function (data) {
-    if (guestNumberSelector.value === 'any') {
-      return true;
-    } else {
-      return guestNumberSelector.value === data.offer.guests.toString();
-    }
+    return guestNumberSelector.value === ANY_VALUE || guestNumberSelector.value === data.offer.guests.toString();
   };
 
   var getNeededFeature = function (data) {
     var counter = 0;
     featuresSelectors.forEach(function (featuresSelector) {
-      if (featuresSelector.checked === true) {
+      if (featuresSelector.checked) {
         counter--;
         for (var i = 0; i < data.offer.features.length; i++) {
           if (data.offer.features[i] === featuresSelector.value) {

@@ -48,6 +48,6 @@
   uploadImage(adPhotoChooser, adPhotoPreview);
 
   window.imageUpload = {
-    resetImages: resetImages
+    reset: resetImages
   };
 })();

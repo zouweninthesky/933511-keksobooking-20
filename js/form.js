@@ -11,20 +11,45 @@
   var adTimeOut = adForm.querySelector('#timeout');
   var adRoomNumber = adForm.querySelector('#room_number');
   var adCapacity = adForm.querySelector('#capacity');
+  var MAX_PRICE = 1000000;
+  var ERROR_COLOR = 'red';
+  var DEFAULT_COLOR = '#d9d9d3';
 
-  var minPriceValues = {
+  var MinPriceValues = {
     'bungalo': 0,
     'flat': 1000,
     'house': 5000,
     'palace': 10000
   };
 
-  var addRedBorder = function (input) {
-    input.style.borderColor = 'red';
+  var TitleLengths = {
+    min: 30,
+    max: 100
   };
 
-  var removeRedBorder = function (input) {
-    input.style.borderColor = '#d9d9d3';
+  var GOOD_RESULT = 0;
+  var BAD_RESULT = -1;
+
+  var AdRoomsOptions = {
+    oneRoom: '1',
+    twoRooms: '2',
+    threeRooms: '3',
+    hundredRooms: '100'
+  };
+
+  var AdGuestsOptions = {
+    noGuests: '0',
+    oneGuest: '1',
+    twoGuests: '2',
+    threeGuests: '3'
+  };
+
+  var addErrorBorder = function (input) {
+    input.style.borderColor = ERROR_COLOR;
+  };
+
+  var removeErrorBorder = function (input) {
+    input.style.borderColor = DEFAULT_COLOR;
   };
 
   var getCoordinates = function (start) {
@@ -52,44 +77,44 @@
   };
 
   var checkTitleLength = function () {
-    if (adTitle.value.length < 30) {
-      addRedBorder(adTitle);
+    if (adTitle.value.length < TitleLengths.min) {
+      addErrorBorder(adTitle);
       adTitle.setCustomValidity('Минимум 30 символов!');
       adTitle.reportValidity();
-      return -1;
-    } else if (adTitle.value.length > 100) {
-      addRedBorder(adTitle);
+      return BAD_RESULT;
+    } else if (adTitle.value.length > TitleLengths.max) {
+      addErrorBorder(adTitle);
       adTitle.setCustomValidity('Максимум 100 символов!');
       adTitle.reportValidity();
-      return -1;
+      return BAD_RESULT;
     } else {
-      removeRedBorder(adTitle);
+      removeErrorBorder(adTitle);
       adTitle.setCustomValidity('');
-      return 0;
+      return GOOD_RESULT;
     }
   };
 
   var changePriceForType = function () {
-    adPrice.min = minPriceValues[adType.value];
-    adPrice.placeholder = minPriceValues[adType.value];
+    adPrice.min = MinPriceValues[adType.value];
+    adPrice.placeholder = MinPriceValues[adType.value];
   };
 
   var checkPrice = function () {
     if (adPrice.value < parseInt(adPrice.min, 10)) {
-      addRedBorder(adPrice);
+      addErrorBorder(adPrice);
       adPrice.setCustomValidity('Минимальная цена - ' + adPrice.min + '!');
       adPrice.reportValidity();
-      return -1;
-    } else if (adPrice.value > 1000000) {
-      addRedBorder(adPrice);
-      adPrice.setCustomValidity('Максимальная цена - 1 миллион!');
+      return BAD_RESULT;
+    } else if (adPrice.value > MAX_PRICE) {
+      addErrorBorder(adPrice);
+      adPrice.setCustomValidity('Максимальная цена - ' + MAX_PRICE + '!');
       adPrice.reportValidity();
-      return -1;
+      return BAD_RESULT;
     } else {
-      removeRedBorder(adPrice);
+      removeErrorBorder(adPrice);
       adPrice.setCustomValidity('');
       adPrice.reportValidity();
-      return 0;
+      return GOOD_RESULT;
     }
   };
 
@@ -98,36 +123,36 @@
   };
 
   var checkRoomCapacityInput = function () {
-    if (adRoomNumber.value === '1' && adCapacity.value !== '1') {
-      addRedBorder(adCapacity);
+    if (adRoomNumber.value === AdRoomsOptions.oneRoom && adCapacity.value !== AdGuestsOptions.oneGuest) {
+      addErrorBorder(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного гостя!');
       adCapacity.reportValidity();
-      return -1;
-    } else if (adRoomNumber.value === '2' && !(adCapacity.value === '1' || adCapacity.value === '2')) {
-      addRedBorder(adCapacity);
+      return BAD_RESULT;
+    } else if (adRoomNumber.value === AdRoomsOptions.twoRooms && !(adCapacity.value === AdGuestsOptions.oneGuest || adCapacity.value === AdGuestsOptions.twoGuests)) {
+      addErrorBorder(adCapacity);
       adCapacity.setCustomValidity('Можно взять только одного или двух гостей!');
       adCapacity.reportValidity();
-      return -1;
-    } else if (adRoomNumber.value === '3' && adCapacity.value === '0') {
-      addRedBorder(adCapacity);
+      return BAD_RESULT;
+    } else if (adRoomNumber.value === AdRoomsOptions.threeRooms && adCapacity.value === AdGuestsOptions.noGuests) {
+      addErrorBorder(adCapacity);
       adCapacity.setCustomValidity('Выберите количество гостей.');
       adCapacity.reportValidity();
-      return -1;
-    } else if (adRoomNumber.value === '100' && adCapacity.value !== '0') {
-      addRedBorder(adCapacity);
+      return BAD_RESULT;
+    } else if (adRoomNumber.value === AdRoomsOptions.hundredRooms && adCapacity.value !== AdGuestsOptions.noGuests) {
+      addErrorBorder(adCapacity);
       adCapacity.setCustomValidity('Эта опция не для гостей.');
       adCapacity.reportValidity();
-      return -1;
+      return BAD_RESULT;
     } else {
-      removeRedBorder(adCapacity);
+      removeErrorBorder(adCapacity);
       adCapacity.setCustomValidity('');
       adCapacity.reportValidity();
-      return 0;
+      return GOOD_RESULT;
     }
   };
 
   var globalCheck = function () {
-    return (checkTitleLength() + checkPrice() + checkRoomCapacityInput() === 0);
+    return (checkTitleLength() + checkPrice() + checkRoomCapacityInput() === GOOD_RESULT);
   };
 
   adTitle.addEventListener('input', function () {
@@ -162,6 +187,6 @@
     getCoordinates: getCoordinates,
     changePriceForType: changePriceForType,
     globalCheck: globalCheck,
-    removeRedBorder: removeRedBorder
+    removeErrorBorder: removeErrorBorder
   };
 })();
