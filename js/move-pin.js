@@ -2,17 +2,17 @@
 
 (function () {
   var DragArea = {
-    minY: 130,
-    minX: 0,
-    maxY: 630,
-    maxX: document.querySelector('.map').clientWidth
+    MIN_Y: 130,
+    MIN_X: 0,
+    MAX_Y: 630,
+    MAX_X: document.querySelector('.map').clientWidth
   };
 
   var pinRestrictedCoordinates = {
-    minY: DragArea.minY - window.util.PIN_HEIGHT,
-    maxY: DragArea.maxY - window.util.PIN_HEIGHT,
-    minX: DragArea.minX - window.util.PIN_WIDTH_HALF,
-    maxX: DragArea.maxX - window.util.PIN_WIDTH_HALF
+    minY: DragArea.MIN_Y - window.util.PIN_HEIGHT,
+    maxY: DragArea.MAX_Y - window.util.PIN_HEIGHT,
+    minX: DragArea.MIN_X - window.util.PIN_WIDTH_HALF,
+    maxX: DragArea.MAX_X - window.util.PIN_WIDTH_HALF
   };
 
   var mainPin = document.querySelector('.map__pin--main');
@@ -83,7 +83,7 @@
   });
 
   var updateDragAreaWidth = function () {
-    DragArea.maxX = document.querySelector('.map').clientWidth;
+    DragArea.MAX_X = document.querySelector('.map').clientWidth;
     pinRestrictedCoordinates.maxX = DragArea.maxX - window.util.PIN_WIDTH_HALF;
     if (parseInt(mainPin.style.left.replace(/px/g, ''), 10) >= pinRestrictedCoordinates.maxX) {
       mainPin.style.left = pinRestrictedCoordinates.maxX + 'px';
@@ -97,9 +97,9 @@
   window.addEventListener('resize', onDocumentResize);
 
   window.movePin = {
-    minX: DragArea.minX,
-    maxX: DragArea.maxX,
-    minY: DragArea.minY,
-    maxY: DragArea.maxY
+    minX: DragArea.MIN_X,
+    maxX: DragArea.MAX_X,
+    minY: DragArea.MIN_Y,
+    maxY: DragArea.MAX_Y
   };
 })();
